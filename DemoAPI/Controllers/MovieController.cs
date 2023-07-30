@@ -16,6 +16,22 @@ public class MovieController : ControllerBase
         _context = context;
     }
 
+    [HttpGet("GetAllLists")]
+    public async Task<ActionResult<List<MovieList>>> GetAllLists()
+    {
+
+        List<MovieList> list = await _context.MovieLists!.Include(ml => ml.Movies)
+            .ToListAsync();
+
+        if (list == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(list);
+
+    }
+
     [HttpGet("GetList/{id}")]
     public async Task<ActionResult<MovieList>> GetList(int id)
     {
